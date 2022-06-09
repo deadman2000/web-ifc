@@ -1,6 +1,6 @@
 {
   "name": "@aniklab/web-ifc",
-  "version": "0.0.34",
+  "version": "0.0.34-1",
   "description": "ifc loading on the web",
   "main": "web-ifc-api-node.js",
   "module": "web-ifc-api.js",
