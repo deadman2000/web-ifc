@@ -10,5 +10,6 @@ npm_publish:
     - cp .npmrc /root/.npmrc
   script:
     - npm i
+    - npm run set-version
     - npm run build-release-all
-    - npm set $NPM_TOKEN; npm publish --access public
+    - npm set $NPM_TOKEN; cd dist; npm publish --access public
