@@ -1,5 +1,5 @@
 {
-  "name": "web-ifc",
+  "name": "@aniklab/web-ifc",
   "version": "0.0.34",
   "description": "ifc loading on the web",
   "main": "web-ifc-api-node.js",
@@ -52,6 +52,9 @@
     "docker-run-container": "docker run --rm -d -p 3000:5000 --name web-ifc-container web-ifc",
     "docker-get-compiled-files": "docker cp web-ifc-container:/web-ifc-app/dist .",
     "test": "jest ./tests"
+  },
+  "publishConfig": {
+    "registry": "https://nexus.aniklab.com/nexus/repository/npm-releases/"
   },
   "author": "tomvandig",
   "files": [

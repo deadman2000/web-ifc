@@ -1,0 +1,14 @@
+stages:
+  - build
+
+npm_publish:
+  stage: build
+  only:
+    - aniklab
+  image: emscripten/emsdk:2.0.25
+  before_script:
+    - cp .npmrc /root/.npmrc
+  script:
+    - npm i
+    - npm run build-release-all
+    - npm set $NPM_TOKEN; npm publish --access public
