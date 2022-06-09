@@ -1600,15 +1600,15 @@ namespace webifc
 			// Read edgeCurve
 
 			auto edgeID = _loader.ExpressIDToLineID(edgeCurveRef);
-			line = _loader.GetLine(edgeID);
+			auto& edgeLine = _loader.GetLine(edgeID);
 
-			_loader.MoveToArgumentOffset(line, 0);
+			_loader.MoveToArgumentOffset(edgeLine, 0);
 			uint32_t vertex1Ref = _loader.GetRefArgument();
 
-			_loader.MoveToArgumentOffset(line, 1);
+			_loader.MoveToArgumentOffset(edgeLine, 1);
 			uint32_t vertex2Ref = _loader.GetRefArgument();
 
-			_loader.MoveToArgumentOffset(line, 2);
+			_loader.MoveToArgumentOffset(edgeLine, 2);
 			uint32_t CurveRef = _loader.GetRefArgument();
 			IfcCurve<3> curveEdge = GetCurve<3>(CurveRef);
 
@@ -2345,6 +2345,16 @@ namespace webifc
 
 				return surface;
 			}
+			case ifc2x4::IFCCYLINDRICALSURFACE:
+			{
+				IfcSurface surface;
+
+				_loader.MoveToArgumentOffset(line, 0);
+				uint32_t locationID = _loader.GetRefArgument();
+				surface.transformation = GetLocalPlacement(locationID);
+
+				return surface;
+			}
 			default:
 				_loader.ReportError({LoaderErrorType::UNSUPPORTED_TYPE, "unexpected surface type", line.expressID, line.ifcType});
 				break;
@@ -2853,6 +2863,20 @@ namespace webifc
 				if (!trim.exist)
 				{
 					curve.Add(curve.points[startIndex]);
+				}
+
+				break;
+			}
+			case ifc2x4::IFCBSPLINECURVEWITHKNOTS:
+			{
+				int degree = (int)_loader.GetDoubleArgument(0);
+
+				_loader.MoveToArgumentOffset(line, 1);
+				auto points = _loader.GetSetArgument();
+				for (auto &token : points)
+				{
+					uint32_t pointId = _loader.GetRefArgument(token);
+					curve.Add(GetCartesianPoint<DIM>(pointId));
 				}
 
 				break;
