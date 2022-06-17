@@ -33,8 +33,8 @@ export const LINE_END = 9;
 
 export interface LoaderSettings
 {
-    COORDINATE_TO_ORIGIN: boolean;
-    USE_FAST_BOOLS: boolean;
+    COORDINATE_TO_ORIGIN?: boolean;
+    USE_FAST_BOOLS?: boolean;
     CIRCLE_SEGMENTS_LOW?: number
     CIRCLE_SEGMENTS_MEDIUM?: number
     CIRCLE_SEGMENTS_HIGH?: number
