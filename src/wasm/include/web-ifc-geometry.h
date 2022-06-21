@@ -987,8 +987,10 @@ namespace webifc
 			IfcGeometry result;
       IfcGeometry secondGeom;
 
+      #ifdef __EMSCRIPTEN__
       if (_loader.GetSettings().USE_FAST_BOOLS)
       {
+      #endif
         for(auto geom : secondGeoms)
         {
           if(geom.numFaces != 0)
@@ -1028,6 +1030,7 @@ namespace webifc
           DumpIfcGeometry(r2, L"r2.obj");
         }
         result = boolSubtract(r1, r2);
+      #ifdef __EMSCRIPTEN__
       }
       else
       {
@@ -1068,8 +1071,9 @@ namespace webifc
           return firstGeom;
         }
 
-        result = boolMultiOp_CSGJSCPP(firstGeom, seconds);
+        result = boolMultiOp_Manifold(firstGeom, seconds);
       }
+      #endif
 
 			if (_loader.GetSettings().DUMP_CSG_MESHES)
 			{
@@ -2725,14 +2729,15 @@ namespace webifc
 				trim.start = trim1;
 				trim.end = trim2;
 
+				bool senseAgreement = senseAgreementS == "T";
+
 				if (sameSense == 0)
 				{
 					std::swap(trim.end, trim.start);
+					senseAgreement = !senseAgreement;
 				}
 
-				bool senseAgreement = senseAgreementS == "T";
-
-				ComputeCurve<DIM>(basisCurveID, curve, sameSense != -1 ? sameSense : senseAgreement, trim);
+				ComputeCurve<DIM>(basisCurveID, curve, senseAgreement, trim);
 
 				break;
 			}
