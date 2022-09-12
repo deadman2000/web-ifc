@@ -10,6 +10,9 @@
 
 using namespace std;
 
+static wstring_convert<codecvt_utf8_utf16<char16_t>,char16_t> convert16;
+static wstring_convert<codecvt_utf8<char32_t>,char32_t> convert32;
+
 struct p21decoder
 {
     explicit p21decoder(const vector<char>& source) : p21(source), index(0), error(false), codepage(0) {
@@ -131,8 +134,7 @@ private:
         str[0] = (d1 << 4) | d2;
         str[1] = 0;
         u16string u16str(reinterpret_cast<char16_t*>(str), 1);
-        wstring_convert<codecvt_utf8_utf16<char16_t>,char16_t> convert; 
-        string utf8 = convert.to_bytes(u16str);
+        string utf8 = convert16.to_bytes(u16str);
         copy(utf8.begin(), utf8.end(), back_inserter(result));
     }
 
@@ -152,8 +154,7 @@ private:
         }
 
         u16string u16str(reinterpret_cast<char16_t*>(&bytes[0]), bytes.size() / 2);
-        wstring_convert<codecvt_utf8_utf16<char16_t>,char16_t> convert; 
-        string utf8 = convert.to_bytes(u16str);
+        string utf8 = convert16.to_bytes(u16str);
         copy(utf8.begin(), utf8.end(), back_inserter(result));
     }
     
@@ -176,8 +177,7 @@ private:
         }
         
         u32string u32str(reinterpret_cast<char32_t*>(&bytes[0]), bytes.size() / 4);
-        wstring_convert<codecvt_utf8<char32_t>,char32_t> convert; 
-        string utf8 = convert.to_bytes(u32str);
+        string utf8 = convert32.to_bytes(u32str);
         copy(utf8.begin(), utf8.end(), back_inserter(result));
     }
 
